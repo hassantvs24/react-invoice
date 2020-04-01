@@ -12,8 +12,6 @@ import NotFound from './component/notFound';
 import Purchase from './component/purchase/purchase';
 import PurchaseList from './component/purchase/purchaseList';
 import DuePurchase from './component/purchase/duePurchase';
-
-import './App.css';
 import SalesReturn from './component/sales/salesReturn';
 import PurchaseReturn from './component/purchase/purchaseReturn';
 import Products from './component/product/products';
@@ -40,6 +38,7 @@ import Zone from './component/settings/zone';
 import SummeryReports from './component/reports/summery';
 import CustomerList from './component/customer/customerList';
 import SupplierList from './component/supplier/supplierList';
+import './App.css';
 
 
 class App extends Component {
