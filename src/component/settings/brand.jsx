@@ -2,10 +2,20 @@ import React, { Component } from 'react';
 import Main from '../common/main';
 import DataTable from 'react-data-table-component';
 import TableHeader from './../common/tablHeader';
+import {toast} from 'react-toastify';
+import config from './../../config/index';
+import BrandBox from './box/brandBox';
 
 class Brands extends Component {
     state = { 
-        data:[
+        data:[],
+        searchQuery:"",
+        selectColumn: "title",
+        bulkDelete: []
+     }
+
+     componentDidMount() {
+        const data = [
             { id: 1, title: 'Accountant', year: '1982' },
             { id: 2, title: 'Junior Technical Author', year: '2007' },
             { id: 3, title: 'Software Engineer', year: '2050' },
@@ -25,11 +35,9 @@ class Brands extends Component {
             { id: 17, title: 'Regional Director', year: '1996' },
             { id: 18, title: 'Technical Author', year: '1993' },
             { id: 19, title: 'Regional Director', year: '1971' }
-        ],
+        ]
 
-        searchQuery:"",
-        selectColumn: "title",
-        bulkDelete: []
+        this.setState({data})
      }
 
 
@@ -49,7 +57,7 @@ class Brands extends Component {
             isFilter: true
           },
           {
-            name: 'Action',
+            name: <i class="icon-menu-open2"></i>,
             cell: row => 
                 <React.Fragment>
                     <ul className="icons-list">
@@ -59,7 +67,7 @@ class Brands extends Component {
                             </a>
 
                             <ul className="dropdown-menu dropdown-menu-right">
-                                <li><a href="#/" ><i className="icon-pencil5"></i> Edit</a></li>
+                                <li><a href="#/" data-toggle="modal" data-target="#ediModal" ><i className="icon-pencil5"></i> Edit</a></li>
                                 <li><a onClick={() => this.delData(row.id)}  href="#/" ><i className="icon-bin"></i> Delete</a></li>
                             </ul>
                         </li>
@@ -100,7 +108,12 @@ class Brands extends Component {
     delData = id => {
        const originalData = this.state.data;
        const data = originalData.filter(m => m.id !== id);
-       this.setState({data});
+
+       if(window.confirm(config.confirmDel)){
+            this.setState({data});
+            toast.success(config.del);
+       }
+       
      }
 
      handleBulkDelete = () => {
@@ -119,7 +132,10 @@ class Brands extends Component {
             setData = el;
         });
 
-        this.setState({data: setData});
+        if(window.confirm(config.confirmDel)){
+            this.setState({data: setData});
+            toast.success(config.del);
+        }
      }
 
     handleSearch = query => {
@@ -159,7 +175,7 @@ class Brands extends Component {
         return ( 
             <React.Fragment>
                 <Main title="Brands" header="Brands">
-                    
+                <BrandBox />
                 <DataTable 
                     actions={<TableHeader tableData={data} reportName="Brand Name" tableHeaderData={this.getExportData()} selectColumn={this.searchColumn} isExport={true} bulkDelete={this.handleBulkDelete} filterColumns={this.filterColumn()} onChange={this.handleSearch} />}
                     columns={this.tblTemplate} 
@@ -171,9 +187,10 @@ class Brands extends Component {
                     dense
                     striped
                     responsive
-                    paginationPerPage={10}
-                    paginationRowsPerPageOptions={[10, 15, 25, 50, 100]} />
+                    paginationPerPage={config.row_per_page}
+                    paginationRowsPerPageOptions={config.pagination} />
                 </Main>
+
             </React.Fragment>
          );
     }

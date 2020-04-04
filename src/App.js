@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
+import { Switch, Route, Redirect } from 'react-router-dom';
+import {ToastContainer} from 'react-toastify';
 import Header from './include/header';
 import Aside from './include/aside';
 import Footer from './include/footer';
-import { Switch, Route, Redirect } from 'react-router-dom';
 import Dashboard from './component/dashboard';
 import Sales from './component/sales/sales';
 import InvoiceList from './component/sales/invoiceList';
@@ -49,7 +50,7 @@ class App extends Component {
       <React.Fragment>
 
       <Header />
-      
+      <ToastContainer />
       <div className="page-container">
         <div className="page-content">
 

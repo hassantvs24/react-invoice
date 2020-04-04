@@ -81,6 +81,10 @@
     width: 100%;
 }
 
+.cus{
+    cursor: pointer;
+}
+
 @media print {
     @page {
         size: 8.20in 11.25in;

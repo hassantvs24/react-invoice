@@ -12,14 +12,13 @@ class BrandExport extends Component {
    getBodyData = () => {
         const {tableData} = this.props;
         const tableBody = tableData;
-        
+
         return tableBody;
    };
 
     render() { 
         const tableHeader = this.getHeadData();
         const tableBody = this.getBodyData();
-        console.log(tableBody);
         return ( 
             <div className="container pt-10">
                 <div className="row">

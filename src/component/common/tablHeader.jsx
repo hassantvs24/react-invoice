@@ -34,7 +34,7 @@ class TableHeader extends Component {
         return ( 
             <React.Fragment>
       
-            <div className="btn-group" style={{ zIndex: '10000' }}>
+            <div className="btn-group" style={{ zIndex: '1000' }}>
                 
                     {isExport ? (
                         <React.Fragment>
@@ -44,13 +44,13 @@ class TableHeader extends Component {
                             <ul className="dropdown-menu">
                                 <li>
                                     <ReactToPrint
-                                        trigger={() => <a href="#/"><i className="icon-printer"></i> Print</a>}
+                                        trigger={() => <span className="pl-15 cus"><i className="icon-printer"></i> Print</span>}
                                         content={() => this.componentRef}
                                     />
                                 </li>
                                 <li>
                                 <CsvLink data={createTable} fileName={`${csvFileName}.csv`}>
-                                    <a href="#/"><i className="icon-file-spreadsheet"></i> Export AS CSV</a>
+                                    <span className="cus"><i className="icon-file-spreadsheet"></i> Export AS CSV</span>
                                 </CsvLink>
                                     </li>
                                 
