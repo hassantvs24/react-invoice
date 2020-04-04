@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import ReactToPrint from 'react-to-print';
 import CsvLink from 'react-csv-export';
 import PrintTable from './printTable';

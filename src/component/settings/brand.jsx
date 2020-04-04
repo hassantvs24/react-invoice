@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Joi from 'joi-browser';
 import Main from '../common/main';
 import DataTable from 'react-data-table-component';
 import TableHeader from './../common/tablHeader';
@@ -6,13 +7,26 @@ import {toast} from 'react-toastify';
 import config from './../../config/index';
 import BrandBox from './box/brandBox';
 
+ 
 class Brands extends Component {
     state = { 
         data:[],
         searchQuery:"",
         selectColumn: "title",
-        bulkDelete: []
+        bulkDelete: [],
+        inputFiled: {
+            id: '',
+            title: '',
+            year: ''
+        },
+        errors: {}
      }
+
+     schema = {
+        id: Joi.number().integer().label('ID'),
+        title: Joi.string().required().min(3).label('Movie Title'),
+        year: Joi.number().integer().min(1900).max(2020)
+    }
 
      componentDidMount() {
         const data = [
@@ -113,14 +127,14 @@ class Brands extends Component {
             this.setState({data});
             toast.success(config.del);
        }
-       
+
      }
 
      handleBulkDelete = () => {
          const {bulkDelete, data} = this.state; 
-         
+
          if(bulkDelete.length <= 0) return;
-         
+
          let originalData = data;
          let setDatas = bulkDelete.map(id => {
             originalData = originalData.filter(m => m.id !== id);
@@ -133,7 +147,7 @@ class Brands extends Component {
         });
 
         if(window.confirm(config.confirmDel)){
-            this.setState({data: setData});
+            this.setState({bulkDelete:[], data: setData});
             toast.success(config.del);
         }
      }
@@ -151,11 +165,11 @@ class Brands extends Component {
         const selectedID = selectedData.map(m => {
            return m.id;
         });
+
         this.setState({bulkDelete: selectedID})
         //console.log(state.selectedRows);
       };
 
-    
     getPageData = () => {
         const {searchQuery, data, selectColumn} = this.state;
         let filtered = data;
@@ -168,16 +182,83 @@ class Brands extends Component {
 
     }
 
+    validate = () => {
+        const result = Joi.validate(this.state.inputFiled, this.schema, {abortEarly: false});
+
+        console.log(result);
+
+        const errors = {};
+
+        const {inputFiled} = this.state;
+
+        if(inputFiled.id.trim() === '')
+            errors.id = 'Id is required';
+            
+        if(inputFiled.id.trim().length < 4)
+            errors.title = 'Title is required';
+
+        if(inputFiled.id.trim() === '')
+            errors.year = 'Year is required';
+
+        return Object.keys(errors).length === 0 ? null : errors;
+    }
+
+    handleSubmit = e =>{
+        e.preventDefault();
+
+        const errors = this.validate();
+        console.log(errors);
+        this.setState({errors: errors || {}});
+        
+        if(errors) return;
+        console.log('Submitted');
+    }
+
+
+    validateProperty = ({name, value}) => {
+        if(name === 'id'){
+            if(value.trim()==='') return 'id is required.';
+        }
+
+        if(name === 'title'){
+            if(value.trim()==='') return 'Title is required.';
+        }
+
+        if(name === 'year'){
+            if(value.trim()==='') return 'year is required.';
+        }
+    }
+
+    handleInput = ({currentTarget: input}) => {
+
+        const errors = {...this.state.errors};
+        const errorMessage = this.validateProperty(input);
+        if(errorMessage) errors[input.name] = errorMessage;
+        else delete errors[input.name];
+
+        const inputFiled = {...this.state.inputFiled}
+        inputFiled[input.name] = input.value;
+        this.setState({inputFiled, errors});
+    }
 
     render() { 
         const {filtered: data} = this.getPageData();
-
+        const {inputFiled,  errors} = this.state;
+        
         return ( 
             <React.Fragment>
                 <Main title="Brands" header="Brands">
-                <BrandBox />
+                <BrandBox inputVal={inputFiled} error={errors} handleInputs={this.handleInput} onSubmit={this.handleSubmit} />
                 <DataTable 
-                    actions={<TableHeader tableData={data} reportName="Brand Name" tableHeaderData={this.getExportData()} selectColumn={this.searchColumn} isExport={true} bulkDelete={this.handleBulkDelete} filterColumns={this.filterColumn()} onChange={this.handleSearch} />}
+                    actions={<TableHeader 
+                            tableData={data} 
+                            reportName="Brand Name" 
+                            tableHeaderData={this.getExportData()} 
+                            selectColumn={this.searchColumn} 
+                            isExport={true} bulkDelete={this.handleBulkDelete} 
+                            filterColumns={this.filterColumn()} 
+                            onChange={this.handleSearch} 
+                        />}
                     columns={this.tblTemplate} 
                     data={data} 
                     selectableRows 
@@ -194,6 +275,7 @@ class Brands extends Component {
             </React.Fragment>
          );
     }
+    
 }
  
 export default Brands;

@@ -19,7 +19,7 @@ const EditModal = ({title, size, link, children}) => {
 
                         <div className="modal-footer mt-15">
                             <button type="button" className="btn btn-danger" data-dismiss="modal"><i className="icon-cancel-circle2"></i> Close</button>
-                            <button type="submit" id="submit-all" className="btn btn-info"><i className="icon-checkmark4"></i> Submit</button>
+                            <button type="submit" className="btn btn-info"><i className="icon-checkmark4"></i> Submit</button>
                         </div>
                     </form>
                 </div>
