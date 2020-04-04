@@ -57,7 +57,7 @@ class Brands extends Component {
             isFilter: true
           },
           {
-            name: <i class="icon-menu-open2"></i>,
+            name: <i className="icon-menu-open2"></i>,
             cell: row => 
                 <React.Fragment>
                     <ul className="icons-list">

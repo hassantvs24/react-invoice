@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import ReactToPrint from 'react-to-print';
 import CsvLink from 'react-csv-export';
-import BrandExport from './../settings/export/brandExport';
+import PrintTable from './printTable';
 
 
 class TableHeader extends Component {
@@ -83,7 +83,7 @@ class TableHeader extends Component {
 
 
             <div style={{ display: 'none' }}>
-                <BrandExport reportName={reportName} tableData={createTable} ref={el => (this.componentRef = el)} />
+                <PrintTable  reportName={reportName} tableData={createTable} ref={el => (this.componentRef = el)} />
             </div>
             
 
