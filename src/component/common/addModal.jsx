@@ -1,6 +1,6 @@
 import React from 'react';
 
-const AddModal = ({title, size, link, children}) => {
+const AddModal = ({title, size,  children, link, validate}) => {
     return ( 
         <div id="myModal" className="modal fade">
             <div className={`modal-dialog ${size}`}>
@@ -20,7 +20,7 @@ const AddModal = ({title, size, link, children}) => {
 
                         <div className="modal-footer">
                             <button type="button" className="btn btn-danger" data-dismiss="modal"><i className="icon-cancel-circle2"></i> Close</button>
-                            <button type="submit" className="btn btn-primary"><i className="icon-checkmark4"></i> Submit</button>
+                            <button type="submit" disabled={validate} className="btn btn-primary"><i className="icon-checkmark4"></i> Submit</button>
                         </div>
                     </form>
                 </div>
