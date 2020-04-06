@@ -19,7 +19,7 @@ const AddModal = ({title, size,  children, link, validate}) => {
                         </div>
 
                         <div className="modal-footer">
-                            <button type="button" className="btn btn-danger" data-dismiss="modal"><i className="icon-cancel-circle2"></i> Close</button>
+                            <button type="button" id="addClose" className="btn btn-danger" data-dismiss="modal"><i className="icon-cancel-circle2"></i> Close</button>
                             <button type="submit" disabled={validate} className="btn btn-primary"><i className="icon-checkmark4"></i> Submit</button>
                         </div>
                     </form>

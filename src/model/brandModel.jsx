@@ -23,5 +23,4 @@ function brandData(){
         ]
 }
 
-
-        export default {brandData}
+export default {brandData}

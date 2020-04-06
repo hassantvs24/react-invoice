@@ -1,5 +1,6 @@
 import React from 'react';
 import Joi from 'joi-browser';
+import {toast} from 'react-toastify';
 import bandModal from './../../model/brandModel';
 import Main from '../common/main';
 import DataTable from 'react-data-table-component';
@@ -38,15 +39,63 @@ class Brands extends Pages {
     tblTemplate = [
         {name: 'Title', selector: 'title', sortable: true, isExport: true, isFilter: true},
         {name: 'Year', selector: 'year', sortable: true, isExport: true, isFilter: true},
-        {name: <i className="icon-menu-open2"></i>, cell: row => <RowAction onClick={() => this.delData(row.id)} />, right: true, allowOverflow:true}
+        {name: <i className="icon-menu-open2"></i>, cell: row => <RowAction editPopulate={() => this.editModalPopulate(row.id) } onClick={() => this.delData(row.id)} />, right: true, allowOverflow:true}
     ];
 
+    editModalPopulate = (id) => {
+        const originalData = this.state.data;
 
+        const val = originalData.find((val) => {
+            return val.id === id;
+          });
+
+        this.setState({errors: {}, inputFiled: this.mapToViewModal(val)});
+
+    }
+
+    addModalReset= () => {
+         this.setState({errors: {}, inputFiled:  this.mapToResetModal()});
+     }
 
 
     doSubmit = () => {
         //Call Server
-        console.log('Submitted');
+        const {inputFiled, data: originalData} = this.state;
+
+        const i = originalData.findIndex((val) => {
+            return val.id === Number(inputFiled.id);
+          });
+
+          if(i === -1){
+            const setData = [...originalData, this.mapToViewModal(inputFiled)];
+            this.setState({data: setData, inputFiled: this.mapToResetModal()});
+            this.handleCloseModal();
+            toast.success(config.edit);
+
+          }else{
+            originalData[i] =  this.mapToViewModal(inputFiled);
+            const setData = originalData;
+            this.setState({data: setData, inputFiled: this.mapToResetModal()});
+            this.handleCloseModal();
+            toast.success(config.edit);
+          }
+        
+    }
+
+    mapToViewModal(input){
+        return {
+            id: Number(input.id), 
+            title: input.title, 
+            year: input.year
+        }
+    }
+
+    mapToResetModal(){
+        return {
+            id: '', 
+            title: '', 
+            year: '',
+        }
     }
 
     render() { 
@@ -56,7 +105,14 @@ class Brands extends Pages {
             <React.Fragment>
                 <Main title="Brands" header="Brands">
 
-                <BrandBox disableSubmit={this.validate()} inputVal={inputFiled} error={errors} handleInputs={this.handleInput} onSubmit={this.handleSubmit} />
+                <BrandBox 
+                    disableSubmit={this.validate()} 
+                    modalReset={this.addModalReset} 
+                    inputVal={inputFiled} 
+                    error={errors} 
+                    handleInputs={this.handleInput} 
+                    onSubmit={this.handleSubmit} 
+                />
 
                 <DataTable 
                     actions={<TableHeader 

@@ -4,7 +4,9 @@ import {toast} from 'react-toastify';
 import config from './../../config/index';
 
 class Pages extends Component {
+
     state = { 
+        data:[],
         searchQuery:"",
         inputFiled: {},
         errors: {}
@@ -23,19 +25,6 @@ class Pages extends Component {
         for(let item of result.error.details) errors[item.path[0]] = item.message;
         return errors;
     }
-
-
-    handleSubmit = e =>{
-        e.preventDefault();
-
-        const errors = this.validate();
-        this.setState({errors: errors || {}});
-        
-        if(errors) return;
-
-        this.doSubmit();
-    }
-
 
     validateProperty = ({name, value}) => {
         const obj = {[name]: value};
@@ -58,8 +47,32 @@ class Pages extends Component {
         this.setState({inputFiled, errors});
     }
 
+    handleSubmit = e =>{
+        e.preventDefault();
+
+        const errors = this.validate();
+        this.setState({errors: errors || {}});
+        
+        if(errors) return;
+
+        this.doSubmit();
+
+        console.log(this.state.data);
+
+    }
+
+
+    handleCloseModal = () => {
+        document.getElementById("addClose").click();
+        document.getElementById("ediClose").click();
+    }
+
     /**
      * /Form Validation Method
+     */
+
+    /**
+     * Table Manage Method
      */
 
     filterColumn = () => {
@@ -151,12 +164,6 @@ class Pages extends Component {
      return {filtered};
 
     }
-
-
-     /**
-     * Table Manage Method
-     */
-
 
      /**
      * /Table Manage Method
